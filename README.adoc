@@ -1,15 +1,61 @@
-= JBoss DV & Jboss Data Grid Integration Demo
+= JBoss Data Virtualization and Data Grid Integration Demo
+:source-highlighter: pygments
+:icons: font
+
+This is a demo project to get you started with automatically installing JBoss Data Virtualization and JBoss Data Grid that uses a remote cache as a data source to do CRUD operations.
+
+TODO add additional data sources 
 
 == Option 1 - Install on your machine
 
 == Option 2 - Generate docker install
+
+=== Generate JBoss Data Virtualization docker Container
+
 The following steps can be used to configure and run the demo in docker container
 
-. [Download and unzip]
-. Download products
+. Download project
+. http://www.jboss.org/products/datavirt/download/[Download JBoss Data Virtualization]
 . Add products to installs directory
+. Copy Dockerfile and .dockerignore files in support/docker directory to the project root
 . Build demo image
+
+[source,bash]
+----
+$ sudo docker build -t jmarley/jdv-integration-demo support/docker/jdv/Dockerfile
+----
+
+[start=6]
 . Start demo container
+[source,bash]
+----
+$ sudo docker run -d -p 31000:31000 -p 8080:8080 -p 9990:9990 -p 9999:9999 -t jmarley/jdv-integration-demo
+----
+
+=== Generate Jboss Data Grid docker Container
+
+The following steps can be used to configure and run the demo in docker container
+
+. Download project
+. http://www.jboss.org/products/datavirt/download/[Download JBoss Data Virtualization]
+. Add products to installs directory
+. Copy Dockerfile and .dockerignore files in support/docker directory to the project root
+. Build demo image
+
+[source,bash]
+----
+$ sudo docker build -t jmarley/jdg-integration-demo support/docker/jdg/Dockerfile
+----
+
+[start=6]
+. Start demo container
+[source,bash]
+----
+$ sudo docker run -d -p 31000:31000 -p 8080:8080 -p 9990:9990 -p 9999:9999 -t jmarley/jdg-integration-demo
+----
+
+Additional information can be found in the jbossdemocentral docker https://github.com/jbossdemocentral/docker-developer[developer repository]
+
 
 == Use Case 1
 
