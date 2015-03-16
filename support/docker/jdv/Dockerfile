@@ -9,10 +9,11 @@ ENV DV_HOME /opt/jboss/dv
 ENV DV_VERSION_MAJOR 6
 ENV DV_VERSION_MINOR 1
 ENV DV_VERSION_MICRO 0
-ENV DV_RELEASE Beta
-ENV DV_RELEASE_CYCLE 1
+ENV DV_RELEASE 
+ENV DV_RELEASE_CYCLE 3
 ENV DV_JBOSS_HOME /opt/jboss/dv/jboss-eap-6.3
 ENV JDG_MODULES jboss-datagrid-6.4.0-eap-modules-remote-java-client
+ENV JDG_QUICKSTART jboss-datagrid-6.4.0-quickstarts
 
 # Add Installation Files
 COPY installs/jboss-dv-installer-${DV_VERSION_MAJOR}.${DV_VERSION_MINOR}.${DV_VERSION_MICRO}.${DV_RELEASE}-redhat-${DV_RELEASE_CYCLE}.jar /opt/jboss/ 
