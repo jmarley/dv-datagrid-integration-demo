@@ -17,7 +17,8 @@ ENV JDG_QUICKSTART jboss-datagrid-6.4.0-quickstarts
 
 # Add Installation Files
 COPY installs/jboss-dv-installer-${DV_VERSION_MAJOR}.${DV_VERSION_MINOR}.${DV_VERSION_MICRO}.${DV_RELEASE}-redhat-${DV_RELEASE_CYCLE}.jar /opt/jboss/ 
-copy installs/${JDG_MODULES}.zip /opt/jboss
+COPY installs/${JDG_MODULES}.zip /opt/jboss
+COPY installs/${JDG_QUICKSTART}.zip /opt/jboss
 COPY support/installation-dv /opt/jboss/
 
 # Configure project prerequisites and run installer and cleanup installation components
@@ -26,13 +27,20 @@ RUN sed -i "s:<installpath>.*</installpath>:<installpath>${DV_JBOSS_HOME}</insta
   && rm -rf /opt/jboss/jboss-dv-installer-$DV_VERSION_MAJOR.$DV_VERSION_MINOR.$DV_VERSION_MICRO.${DV_RELEASE}-redhat-$DV_RELEASE_CYCLE.jar \
   && rm -rf /opt/jboss/installation-dv
 
+# unpackage jdg quickstarts
+RUN unzip /opt/jboss/${JDG_QUICKSTART}.zip -d ${DV_JBOSS_HOME} \
+  && cd /opt/jboss/${JDG_QUICKSTART}/remote-query \
+  && mvn clean package -s ../settings \
+  && mv ./target/jboss-remote-query-quickstart.jar ${DV_JBOSS_HOME}/modules/com/client/quickstart/addressbook/pojos/main/ 
+
+
 # add JDG modules
-RUN  unzip /opt/jboss/${JDG_MODULES}.zip -x '${JDG_MODULES}/modules/org/apache/*' \
-	'${JDG_MODULES}/modules/org/infinispan/commons/*' \
-	'${JDG_MODULES}/modules/org/infinispan/protostream/*' \
-	'${JDG_MODULES}/modules/org/infinispan/query/*' \
-	'${JDG_MODULES}/modules/org/jboss/*' \
-	'${JDG_MODULES}/README-JDG-REMOTE-CLIENT.md' \
+RUN  unzip /opt/jboss/${JDG_MODULES}.zip -x "${JDG_MODULES}/modules/org/apache/*" \
+	"${JDG_MODULES}/modules/org/infinispan/commons/*" \
+	"${JDG_MODULES}/modules/org/infinispan/protostream/*" \
+	"${JDG_MODULES}/modules/org/infinispan/query/*" \
+	"${JDG_MODULES}/modules/org/jboss/*" \
+	"${JDG_MODULES}/README-JDG-REMOTE-CLIENT.md" \
 	-d ${DV_JBOSS_HOME} \
   && mv ${DV_JBOSS_HOME}/${JDG_MODULES}/modules/* ${DV_JBOSS_HOME}/modules \
   && rmdir ${DV_JBOSS_HOME}/${JDG_MODULES} \
