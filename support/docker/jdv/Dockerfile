@@ -31,24 +31,18 @@ RUN sed -i "s:<installpath>.*</installpath>:<installpath>${DV_JBOSS_HOME}</insta
 RUN unzip /opt/jboss/${JDG_QUICKSTART}.zip -d ${DV_JBOSS_HOME} \
   && cd /opt/jboss/${JDG_QUICKSTART}/remote-query \
   && mvn clean package -s ../settings \
-  && mv ./target/jboss-remote-query-quickstart.jar ${DV_JBOSS_HOME}/modules/com/client/quickstart/addressbook/pojos/main/ 
+  && mv ./target/jboss-remote-query-quickstart.jar ${DV_JBOSS_HOME}/modules/com/client/quickstart/addressbook/pojos/main/ \ 
+  && rm /opt/jboss/${JDG_QUICKSTART}
 
 
 # add JDG modules
-RUN  unzip /opt/jboss/${JDG_MODULES}.zip -x "${JDG_MODULES}/modules/org/apache/*" \
-	"${JDG_MODULES}/modules/org/infinispan/commons/*" \
-	"${JDG_MODULES}/modules/org/infinispan/protostream/*" \
-	"${JDG_MODULES}/modules/org/infinispan/query/*" \
-	"${JDG_MODULES}/modules/org/jboss/*" \
-	"${JDG_MODULES}/README-JDG-REMOTE-CLIENT.md" \
-	-d ${DV_JBOSS_HOME} \
+RUN  unzip /opt/jboss/${JDG_MODULES}.zip -d ${DV_JBOSS_HOME} \
   && mv ${DV_JBOSS_HOME}/${JDG_MODULES}/modules/* ${DV_JBOSS_HOME}/modules \
   && rmdir ${DV_JBOSS_HOME}/${JDG_MODULES} \
   && rm /opt/jboss/${JDG_MODULES}.zip \
 
 # Copy demo, support files and helper script
 COPY support/teiidfiles/src/module_addressbook_pojo/com/ ${DV_JBOSS_HOME}/modules
-COPY support/teiidfiles/jboss-jdg-quickstart/remote-query/target/jboss-remote-query-quickstart.jar ${DV_JBOSS_HOME}/modules/com/client/quickstart/addressbook/pojos/main
 COPY support/vault/VAULT.dat ${DV_JBOSS_HOME}/vault/VAULT.dat
 COPY support/vault.keystore ${DV_JBOSS_HOME}/vault.keystore
 
